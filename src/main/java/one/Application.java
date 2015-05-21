@@ -1,6 +1,7 @@
 package one;
 
 import one.controller.PersonController;
+import one.domain.Person;
 import one.domain.PersonRepository;
 
 import org.slf4j.Logger;
@@ -31,5 +32,16 @@ public class Application implements CommandLineRunner{
 		
 		log.info("clearing repository ...");
 		personRepository.deleteAll();
+                
+                log.info("seeding db ...");
+                   
+                for(int i =0; i<5000; i++){
+                    Person person =new Person();
+                    person.setName("Brian "+i);
+                    person.setAge(i);
+                    personRepository.save(person);
+                }
+                
+                log.info("done seeding db ...");
 	}
 }

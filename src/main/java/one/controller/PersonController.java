@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import one.domain.Person;
 import one.domain.PersonRepository;
+import one.domain.Persons;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,23 +42,32 @@ public class PersonController {
 	
 	// Retrieve -> HTTP.GET
 	@RequestMapping(value ="/api/person/name/{name}", method =RequestMethod.GET)
-	public List<Person> getPerson(@PathVariable("name") String name) {
+	public Persons getPersonByName(@PathVariable String name) {
 		log.info("findByName()");
-		return repository.findByName(name);
+		List<Person> persons = repository.findByName(name);
+                return new Persons(persons);
 	}
 	
 	// Retrieve -> HTTP.GET
 	@RequestMapping(value ="/api/person/age/{age}", method=RequestMethod.GET)
-	public List<Person> getPerson(@PathVariable("age") int age) {
+	public Persons getPersonByAge(@PathVariable int age) {
 		log.info("findByAge()");
-		return repository.findByAge(age);
+		List<Person> persons= repository.findByAge(age);
+                return new Persons(persons);
 	}
+        
+        @RequestMapping(value="/api/person/id/{id}")
+        public Person getPersonById(@PathVariable String id) {
+            log.info("getPersonById()");
+            return repository.findById(id);
+        }
 	
 	// Retrieve -> HTTP.GET
 	@RequestMapping(value ="/api/persons", method=RequestMethod.GET)
-	public List<Person> getAllPersons() {
+	public Persons getAllPersons() {
 		log.info("getAllPersons()");
-		return repository.findAll();
+		List<Person> persons =repository.findAll();
+                return new Persons(persons);
 	}
 	
 	// Update -> HTTP.PUT
@@ -70,7 +80,7 @@ public class PersonController {
 	
 	// Delete -> HTTP.DELETE
 	 @RequestMapping(value="/api/person/id/{id}", method=RequestMethod.DELETE)
-	 public Person deletePerson(@PathVariable("id") String id) {
+	 public Person deletePerson(@PathVariable String id) {
 		 Person person =repository.findById(id);
 		 repository.delete(person);
 		 return person;
